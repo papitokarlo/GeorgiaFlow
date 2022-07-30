@@ -5,14 +5,12 @@
         register HERE
     </div>
     
-    <form method="POST"action="/register">
-    <dl>
-        {{ form.hidden_tag() }}
-        {{ form.fullname.label}}{{ form.fullname}}
-        {{ form.email.label}}{{ form.email }}
-        {{form.password.label}}{{ form.password }}
-        {{form.confirm_password.label}}{{ form.confirm_password}}
-    </dl>
-        {{form.register}}
+    <form method="POST">
+        {{ form.hidden_tag() }} 
+        {{ form.fullname.label }} {{ form.fullname() }}<br />
+        {{ form.email.label }} {{ form.email() }}<br />
+        {{ form.password.label }} {{ form.password() }}<br />
+        {{ form.confirm_password.label }} {{ form.confirm_password() }}<br />
+        {{ form.register()}}
     </form>
 {% endblock %}

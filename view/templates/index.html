@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 {%block title%}HOME-VIEW{%endblock%}
 {% block content %}
-    <div>
-        nice to see u first page
+    <div class="jumbotron">
+        {% if current_user.is_authenticated %}
+        <p>გამარჯობა {{ current_user.fullname }}!</p>
+        {% else %}
+        <p>გაიარე რეგისტრაცია ან ავტორიზაცია</p>
+        {% endif %}
     </div>
+  
 {% endblock %}

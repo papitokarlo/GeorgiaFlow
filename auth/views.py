@@ -1,26 +1,53 @@
 from datetime import datetime
-from auth import app
+from auth import app, db, login_manager
 from flask import render_template, url_for, flash, request, redirect
-from .forms import RegistrateForm
+from flask_login import login_required, logout_user, login_user
+from .forms import RegistrateForm, LoginForm
 from .models import Users
-from auth import db
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Users.query.get(user_id)
+
+
+@app.route('/welcome')
+@login_required
+def welcome_user():
+    return render_template('welcome_user.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('გამოსული ხართ')
+    return redirect(url_for('index'))
+
+
 
 @app.route('/login', methods=['GET', 'POST'])
-def log():    
-   return render_template('login.html')
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = Users.query.filter_by(email=form.email.data).first()
+        if user is not None and user.check_password(form.password.data):
+            login_user(user)
+            flash('ავტორიზაცია წარმატებით დასრულდა')
+            next = request.args.get('next')
+            if next == None or not next[0] == '/':
+                next = url_for('welcome_user')
+
+            return redirect(next)
+    return render_template('login.html', form=form)
 
 @app.route('/register', methods=['GET', 'POST'])
-def register():    
-   form = RegistrateForm()
-   print(form.email.validators)
-   print(form.fullname.data, form.email.data, datetime.utcnow())
-   if form.validate_on_submit():
-      print(form.fullname.data, form.email.data, datetime.utcnow())
-      new_user = Users(form.fullname.data, form.email.data, datetime.utcnow(), form.password.data)
-      Users.add_user(new_user)
-      flash('register succesfuly')
-      print("£here we are")
-      return redirect(url_for('login'))
-      
-    
-   return render_template('register.html', form=form)
+def register():
+    form = RegistrateForm()
+
+    if form.validate_on_submit():
+         user = Users(form.fullname.data, form.email.data, datetime.utcnow(), form.password.data)
+
+         db.session.add(user)
+         db.session.commit()
+         flash('რეგისტრაცია წარმატებით დასრულდა!')
+         return redirect(url_for('login'))
+    return render_template('register.html', form=form)
