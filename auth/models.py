@@ -1,7 +1,8 @@
-from auth import db
+from auth import db, admin
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+from flask_admin.contrib.sqla import ModelView
 
 
 class Users(db.Model, UserMixin):
@@ -24,6 +25,7 @@ class Users(db.Model, UserMixin):
         return check_password_hash(self.password_hash,password)
 
 
+admin.add_view(ModelView(Users, db.session))
   
 # new = Users("zura befadze", "begadze.zy@gmail.com", datetime.utcnow(), "kasndansda")
 # db.drop_all()
