@@ -4,7 +4,11 @@ from flask_migrate import Migrate
 
 import os 
 
-app = Flask(__name__)
+
+templatedir = os.path.abspath("templates")
+
+app = Flask(__name__, template_folder=templatedir)
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app.config['SECRET_KEY'] = 'thisissecret'
