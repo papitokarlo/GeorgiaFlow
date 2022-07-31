@@ -44,10 +44,10 @@ def register():
     form = RegistrateForm()
 
     if form.validate_on_submit():
-         user = Users(form.fullname.data, form.email.data, datetime.utcnow(), form.password.data)
+        user = Users(form.fullname.data, form.email.data, datetime.utcnow(), form.password.data)
 
-         db.session.add(user)
-         db.session.commit()
-         flash('რეგისტრაცია წარმატებით დასრულდა!')
-         return redirect(url_for('login'))
+        db.session.add(user)
+        db.session.commit()
+        flash('რეგისტრაცია წარმატებით დასრულდა!')
+        return redirect(url_for('login'))
     return render_template('register.html', form=form)
