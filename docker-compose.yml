@@ -1,0 +1,6 @@
+version: "3.9"  # Version of YAML optional since v1.27.0
+services:
+  flask_app:
+    build: .
+    ports:
+      - "8000:8000"
