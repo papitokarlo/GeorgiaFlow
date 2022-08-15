@@ -1,5 +1,6 @@
 from view import app
 from auth import app
+from questions import app
 
 
 if __name__ == '__main__':

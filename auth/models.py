@@ -3,7 +3,7 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from flask_admin.contrib.sqla import ModelView
-
+from questions.models import Question
 
 class Users(db.Model, UserMixin):
 
@@ -14,6 +14,7 @@ class Users(db.Model, UserMixin):
     email = db.Column(db.String(100), nullable = False, unique = True, index=True)
     date_add = db.Column(db.DateTime, default = datetime.utcnow())
     password_hash = db.Column(db.String(128)) 
+    posts = db.relationship('Question', backref='poster')
 
     def __init__(self, fullname, email, date_add, password_hash):
         self.fullname = fullname
@@ -26,6 +27,8 @@ class Users(db.Model, UserMixin):
 
 
 admin.add_view(ModelView(Users, db.session))
+
+
   
 # new = Users("zura befadze", "begadze.zy@gmail.com", datetime.utcnow(), "kasndansda")
 # db.drop_all()

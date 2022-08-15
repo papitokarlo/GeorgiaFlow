@@ -1,7 +1,7 @@
 from view import app, db, migrate
 from flask_login import LoginManager
 from flask_admin import Admin
-
+# from questions.models import Question
 
 login_manager = LoginManager()
 login_manager.init_app(app)

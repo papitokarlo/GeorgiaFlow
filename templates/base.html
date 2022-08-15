@@ -21,14 +21,17 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('index') }}">თავფურცელი</a>
+            <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('question') }}">ASK QUESTION</a>
           </li>
           {% if current_user.is_authenticated %}
-          <li class="nav-link"><a href="{{ url_for('logout') }}">გამოსვლა</a></li>
+          <li class="nav-link"><a href="{{ url_for('logout') }}">EXIT</a></li>
           {% else %}
-          <li class="nav-link"><a href="{{ url_for('login') }}">შესვლა</a></li>
+          <li class="nav-link"><a href="{{ url_for('login') }}">ENTER</a></li>
           <li class="nav-link">
-            <a href="{{ url_for('register') }}">რეგისტრაცია</a>
+            <a href="{{ url_for('register') }}">REGISTRATION</a>
           </li>
           {% endif %}
         </ul>
