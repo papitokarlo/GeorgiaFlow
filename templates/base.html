@@ -24,14 +24,20 @@
             <a class="nav-link" href="{{ url_for('index') }}">Home</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('allQuestion') }}">QUESTIONS</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="{{ url_for('question') }}">ASK QUESTION</a>
           </li>
           {% if current_user.is_authenticated %}
-          <li class="nav-link"><a href="{{ url_for('logout') }}">EXIT</a></li>
+          <li class="nav-item">
+            <li class="nav-link"><a href="{{ url_for('myQuestion') }}">Profile</a></li>
+          </li>
+          <li class="nav-link"><a href="{{ url_for('logout') }}">Log out</a></li>          
           {% else %}
-          <li class="nav-link"><a href="{{ url_for('login') }}">ENTER</a></li>
+          <li class="nav-link"><a href="{{ url_for('login') }}">Log in</a></li>
           <li class="nav-link">
-            <a href="{{ url_for('register') }}">REGISTRATION</a>
+            <a href="{{ url_for('register') }}">Sing ip</a>
           </li>
           {% endif %}
         </ul>

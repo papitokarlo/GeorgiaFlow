@@ -1,0 +1,28 @@
+{% extends "base.html" %} {% block title %}Questions{% endblock %} {% block content%}
+    <h1 align="center">Posts</h1>
+    <div id="posts">
+      {% for question in questions %}
+        <div class="card border-dark">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <a>{{question.user.fullname}}</a>
+            </div>
+            <div class="card-body">
+                <div class="card-text">{{question.question}}</div>
+                <br />
+                
+            </div>
+            {%for comment in question.comments%}
+              {{comment.comment}} author : {{comment.comment_user.fullname}}
+            {%endfor%}
+            <div class="card-footer text-muted">{{question.date_add}}</div>
+            <form class="input-group mb-3" method="POST" action="/allQuestion/{{question.id}}" >
+              <input type = "text" id = "text" name="text" placeholder="Comment something!", class="form-control" />
+              <button class="btn btn-primary", type="submit"> COMMENT</button>                
+            </form>
+        </div>
+      <br/ > 
+      
+      <br/ >
+      {% endfor %}
+    </div>
+{% endblock %}

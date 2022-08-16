@@ -1,0 +1,23 @@
+{% extends "base.html" %} {% block title %}My-Questions{% endblock %} {% block content%}
+    <h1 align="center">Posts</h1>
+    <div id="posts">
+        {% if current_user.is_authenticated %}
+        {% for question in questions %}
+        <div class="card border-dark">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <a>{{question.user.fullname}}</a>
+            </div>
+            <div class="card-body">
+                <div class="card-text">{{question.question}}</div>
+                <br />
+                
+            </div>
+            <div class="card-footer text-muted">{{question.date_add}}</div>
+        </div>
+        <br/ > 
+        {% endfor %}
+        {% else %}
+            <p>to access content registrate or login</p>
+        {% endif %}
+    </div>
+{% endblock %}
