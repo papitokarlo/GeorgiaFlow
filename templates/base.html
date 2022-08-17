@@ -9,26 +9,26 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
 
-    <title>{% block title %}{% endblock%}</title>
+    <title>GeorgianFlow-{% block title %}{% endblock%}</title>
   </head>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class=flashes>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">NAME</a>
+      <a class="navbar-brand" href="{{ url_for('allQuestion') }}">GeorgianFlow</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
     
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('index') }}">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('allQuestion') }}">QUESTIONS</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('question') }}">ASK QUESTION</a>
-          </li>
           {% if current_user.is_authenticated %}
           <li class="nav-item">
             <li class="nav-link"><a href="{{ url_for('myQuestion') }}">Profile</a></li>
@@ -37,7 +37,7 @@
           {% else %}
           <li class="nav-link"><a href="{{ url_for('login') }}">Log in</a></li>
           <li class="nav-link">
-            <a href="{{ url_for('register') }}">Sing ip</a>
+            <a href="{{ url_for('register') }}">Sing up</a>
           </li>
           {% endif %}
         </ul>

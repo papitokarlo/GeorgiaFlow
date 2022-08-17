@@ -7,18 +7,11 @@
                 <a>{{question.user.fullname}}</a>
             </div>
             <div class="card-body">
-                <div class="card-text">{{question.question}}</div>
+                <div class="card-text"><a href="questions/{{question.id}}">{{question.question}}</a></div>
                 <br />
                 
             </div>
-            {%for comment in question.comments%}
-              {{comment.comment}} author : {{comment.comment_user.fullname}}
-            {%endfor%}
             <div class="card-footer text-muted">{{question.date_add}}</div>
-            <form class="input-group mb-3" method="POST" action="/allQuestion/{{question.id}}" >
-              <input type = "text" id = "text" name="text" placeholder="Comment something!", class="form-control" />
-              <button class="btn btn-primary", type="submit"> COMMENT</button>                
-            </form>
         </div>
       <br/ > 
       

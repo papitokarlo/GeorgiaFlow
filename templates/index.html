@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{%block title%}HOME-VIEW{%endblock%}
+{%block title%}{{ current_user.fullname }}{%endblock%}
 {% block content %}
     <div class="jumbotron">
         {% if current_user.is_authenticated %}

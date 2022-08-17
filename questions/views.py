@@ -20,16 +20,28 @@ def question():
         return redirect(url_for('index'))
     return render_template('question.html', form=form)
 
+
+
+
+
 @app.route('/myQuestion', methods=['GET', 'POST'])
 @login_required
 def myQuestion():
     questions = Question.query.filter_by(user_id=current_user.id)
     return render_template('myquestions.html', questions=questions)
 
+
+
 @app.route('/allQuestion', methods=['GET', 'POST'])
 def allQuestion():
     questions = Question.query.order_by(desc(Question.date_add)).all()
     return render_template('allquestions.html', questions=questions)
+
+
+@app.route('/questions/<question_id>', methods=['GET', 'POST'])
+def question_detail(question_id):
+    question = Question.query.filter_by(id=question_id).first()
+    return render_template('detail.html', question=question)
 
 
 @app.route("/allQuestion/<question_id>", methods = ['GET', 'POST'])

@@ -1,0 +1,48 @@
+{% extends "base.html" %} {% block title %}{{question.id}}{% endblock %} {% block content%}
+    <h1 align="center">Posts</h1>
+    <div id="posts">
+        <div class="card border-dark">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <a>{{question.user.fullname}}</a>
+            </div>
+            <div class="card-body">
+                <div class="card-text">{{question.question}}</div>
+                <br />
+                <div>
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-text">
+                                {% if question.comments|length > 0 %}
+                                <a>
+                                    <small>View {{question.comments|length}} Comments</small>
+                                </a>
+                                {%for comment in question.comments%}
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <a href="#">{{comment.comment_user.fullname}}</a>: {{comment.comment}}
+                                    </div>
+                                    <div>
+                                        <small class="text-muted"> {{comment.date_add}}</small>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                {% else %}                                        
+                                <small class="text-muted">No Comments</small>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-muted">{{question.date_add}}</div>
+            <div><a href="/delete-question/{{question.id}}" class="dropdown-item">Delete</a></div>
+            <form class="input-group mb-3" method="POST" action="/allQuestion/{{question.id}}" >
+              <input type = "text" id = "text" name="text" placeholder="Comment something!", class="form-control" />
+              <button class="btn btn-primary", type="submit"> COMMENT</button>                
+            </form>
+        </div>
+      <br/ > 
+      
+      <br/ >
+    </div>
+{% endblock %}
