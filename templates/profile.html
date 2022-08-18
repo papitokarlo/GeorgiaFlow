@@ -1,0 +1,45 @@
+{% extends "base.html" %} {% block title %}{{current_user}}{% endblock %} {% block content%}
+    <h1 align="center">Posts</h1>
+    <div id="posts">
+        {% if current_user.id  == user.id %}
+        <form method="POST">
+            {{ form.hidden_tag() }} 
+            <div class="form-group">
+              <label for="exampleFormControlTextarea1">Type question here</label>
+              {{ form.question(class="form-control", id="exampleFormControlTextarea1", rows="3")}}
+              {{ form.ask(class="btn btn-primary mb-2")}}
+            </div>
+        </form>
+       
+        {%endif%}
+        {% for post in user.posts%}
+        <div class="card text-center">
+            <div class="card-header">
+                {{user.fullname}}
+            </div>
+            <div class="card-body">
+                <div class="card-title">
+                    <h5 >tags </h5>
+                </div>
+                
+                <p class="card-text">{{post}}</p>
+                <a href="{{ url_for('question_detail', question_id=post.id)}}" class="btn btn-primary">Comment</a>
+            </div>
+            <div class="card-footer text-muted">
+                {{post.date_add}} 
+                {% if post.comments|length > 0 %}
+                <a href="{{ url_for('question_detail', question_id=post.id)}}">  {{post.comments|length}}  answer </a>
+                {%else%}
+                no answer yet
+                {%endif%}
+                {%if post.user.id == current_user.id%}
+                <div>
+                    <a href="{{url_for('delete_question', question_id=post.id)}}" class="dropdown-item"><smal class="text-muted">Delete</smal></a>
+                </div>
+                {%endif%}
+                </div>
+        </div>
+        {%endfor%}
+        
+    </div>
+{% endblock %}

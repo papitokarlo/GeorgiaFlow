@@ -15,7 +15,7 @@ class Question(db.Model):
         self.user_id = user_id
         
     def __repr__(self):
-        return self.id
+        return self.question
         
 
 class Comments(db.Model):
@@ -33,14 +33,9 @@ class Comments(db.Model):
         self.question_id = question_id
 
     def __repr__(self):
-        return self.id
+        return self.comment
 
 
-
-# news = Question("questmsnadnion" )
-# news2= Question("questio22n")
-# db.drop_all()
-# db.create_all()
-# db.session.add(news, news2)
+# for j in range(1, 1000):
+#     Question.query.filter_by(id=j).delete()
 # db.session.commit()
- 

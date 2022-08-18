@@ -5,31 +5,26 @@ from flask_login import current_user
 from .models import Question, Comments
 from .forms import questionForm, commentForm
 
-@app.route('/question', methods=['GET', 'POST'])
-@login_required
-def question():
-    form = questionForm()
-    if form.validate_on_submit():
-        user = current_user.id
-        print(user)
-        question = Question(form.question.data, user)
 
-        db.session.add(question)
+@app.route('/delete-question/<question_id>', methods=['GET', 'POST'])
+@login_required
+def delete_question(question_id):
+    post = Question.query.filter_by(id=question_id).first()
+    if post:
+        db.session.delete(post)
         db.session.commit()
-        flash('posted succesfuly')
-        return redirect(url_for('index'))
-    return render_template('question.html', form=form)
+        flash('Question deleted', category='success')
+    return redirect(url_for('allQuestion'))
 
-
-
-
-
-@app.route('/myQuestion', methods=['GET', 'POST'])
+@app.route('/delete-comment/<comment_id>', methods=['GET', 'POST'])
 @login_required
-def myQuestion():
-    questions = Question.query.filter_by(user_id=current_user.id)
-    return render_template('myquestions.html', questions=questions)
-
+def delete_comment(comment_id):
+    comment = Comments.query.filter_by(id=comment_id).first()
+    if comment:
+        db.session.delete(comment)
+        db.session.commit()
+        flash('Comment deleted', category='success')
+    return redirect(url_for('allQuestion'))
 
 
 @app.route('/allQuestion', methods=['GET', 'POST'])
@@ -53,11 +48,5 @@ def add_comment(question_id):
         comment = Comments(text, user, question_id)    
         db.session.add(comment)
         db.session.commit()
-    return redirect(url_for('allQuestion'))
+    return redirect(url_for('allQuestion', question_id=question_id))
 
-
-    
-# @app.route('/create-comment<>', methods=['GET', 'POST'])
-# @login_required
-# def create_comment():
-#     return redirect()

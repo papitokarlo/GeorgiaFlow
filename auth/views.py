@@ -1,13 +1,29 @@
 from datetime import datetime
 from auth import app, db, login_manager
 from flask import render_template, url_for, flash, request, redirect
-from flask_login import login_required, logout_user, login_user
+from flask_login import login_required, logout_user, login_user, current_user
 from .forms import RegistrateForm, LoginForm
-from .models import Users
+from .models import Users, Question, Comments
+from questions.forms import questionForm
 
 @login_manager.user_loader
 def load_user(user_id):
     return Users.query.get(user_id)
+
+
+@app.route('/user/<user_id>', methods=['GET', 'POST'])
+def get_user(user_id):
+    user = Users.query.filter_by(id = user_id).first()
+    form = questionForm()
+    if form.validate_on_submit():
+        user = current_user.id
+        question = Question(form.question.data, user)
+
+        db.session.add(question)
+        db.session.commit()
+        flash('posted succesfuly')
+        return render_template("profile.html", user = user, form=form)
+    return render_template("profile.html", user = user, form=form)
 
 
 @app.route('/welcome')

@@ -32,7 +32,8 @@ class Users(db.Model, UserMixin):
 
 admin.add_view(ModelView(Users, db.session))
 
-
+# Users.query.filter_by(id=9).delete()
+# db.session.commit()
   
 # new = Users("zura befadze", "begadze.zy@gmail.com", datetime.utcnow(), "kasndansda")
 # db.drop_all()

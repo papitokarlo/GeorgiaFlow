@@ -31,16 +31,17 @@
         <ul class="navbar-nav mr-auto">
           {% if current_user.is_authenticated %}
           <li class="nav-item">
-            <li class="nav-link"><a href="{{ url_for('myQuestion') }}">Profile</a></li>
+            <li class="nav-item nav-link"><a href="{{ url_for('get_user', user_id=current_user.id)}}">Profile</a></li>
           </li>
-          <li class="nav-link"><a href="{{ url_for('logout') }}">Log out</a></li>          
+          <li class="nav-item nav-link"><a href="{{ url_for('logout') }}">Log out</a></li>          
           {% else %}
-          <li class="nav-link"><a href="{{ url_for('login') }}">Log in</a></li>
-          <li class="nav-link">
+          <li class="nav-item nav-link"><a href="{{ url_for('login') }}">Log in</a></li>
+          <li class="nav-item nav-link">
             <a href="{{ url_for('register') }}">Sing up</a>
           </li>
           {% endif %}
         </ul>
+        <a class="navbar-brand" href="{{ url_for('get_user', user_id=current_user.id)}}">{{current_user.fullname}}</a>
         <form class="form-inline my-2 my-lg-0">
           <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
