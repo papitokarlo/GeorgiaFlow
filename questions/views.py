@@ -2,8 +2,28 @@ from flask import Flask, render_template, flash, redirect, url_for, request
 from questions import app, login_manager, login_required, db
 from sqlalchemy import desc
 from flask_login import current_user
-from .models import Question, Comments
+from .models import Question, Comments, Likes
 from .forms import questionForm, commentForm
+
+@app.route('/like-post/<question_id>', methods=['POST', 'GET'])
+@login_required
+def like(question_id):
+    post = Question.query.filter_by(id=question_id).first()
+    like = Likes.query.filter_by(user_id=current_user.id, question_id=question_id).first()
+
+    if not post:
+        flash("Question doesnt exist", category='error')
+    elif like:
+        db.session.delete(like)
+        db.session.commit()
+    else : 
+        like = Likes(current_user.id, question_id)
+        db.session.add(like)
+        db.session.commit()
+
+    return redirect(url_for('allQuestion'))
+        # return jsonify({'likes':len(post.likes), "liked": current_user.id in map(lambda x: x.user_id, post.likes)})
+
 
 
 @app.route('/delete-question/<question_id>', methods=['GET', 'POST'])

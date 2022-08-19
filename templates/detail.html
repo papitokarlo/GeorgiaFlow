@@ -9,6 +9,14 @@
                 <div class="card-text">{{question.question}}</div>
                 <br />
                 <div>
+                    <span>{{ question.likes|length }}</span> 
+                      {% if current_user.id in question.likes|map(attribute="user_id")|list %}
+                      <a href="{{ url_for('like', question_id=question.id)}}"><i class="fas fa-thumbs-up"></i></a>
+                      {% else %}                    
+                      <a href="{{ url_for('like', question_id=question.id)}}"><i class="far fa-thumbs-up"></i></a>
+                    {%endif%}
+                </div>
+                <div>
                     <div class="card">
                         <div class="card-body">
                             <p class="card-text">
