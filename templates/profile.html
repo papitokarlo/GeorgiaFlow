@@ -1,61 +1,135 @@
-{% extends "base.html" %} {% block title %}{{current_user}}{% endblock %} {% block content%}
+{% extends 'base.html' %}
+{%block title%}GeorgiaFlow-{{user.fullname}}{%endblock%}
+{% block content %}
     <div class="card text-center">
-        
-        <div class="card-body">
-            <h5 class="card-title">{{user.fullname}}</h5>
-            <p class="card-text">linkdn user :natural lead-in to additional content.</p>
-            <p class="card-text">github user :natural lead-in to additional content.</p>
             
+        <div class="card-body">
+            <h5 class="card-title fw-bolder">{{user.fullname}}</h5>
+            <p class="card-text fw-semibold">Mail : <a class="link-secondary" href="mailto:{{user.email}}">{{user.email}}</a></p>
+            <p type="url" class="card-text fw-semibold" >LinkdIn : <a href="{{user.linkedin}}" class="link-secondary">{{user.linkedin}}</a></p>
+            <p type="url" class="card-text fw-semibold">GitHub : <a href="{{user.github}}" class="link-secondary">{{user.github}}</a></p>
+            <br />
+            <p type="url" class="fw-normal text-right fst-italic">Total questions : {{user.posts|length}} </p>
+            <p type="url" class="fw-normal text-right fst-italic">Total answers : {{user.comments|length}} </p>
+            <p type="url" class="fw-normal text-right fst-italic">Total created tags : {{user.tags|length}} </p>
+            <p type="url" class="fw-normal text-right fst-italic">Total likes on posts : {{user.posts.likes|length}} </p>
         </div>
     </div>
     <div id="posts">
         {% if current_user.id  == user.id %}
+        
+        <h1 align="center">Make a Post</h1>
+
         <form method="POST">
             {{ form.hidden_tag() }} 
-            <div class="form-group">
-              <label for="exampleFormControlTextarea1">Type question here</label>
-              {{ form.question(class="form-control", id="exampleFormControlTextarea1", rows="3")}}
-              {{ form.ask(class="btn btn-primary mb-2")}}
+            <label for="header">Question </label>
+            {{form.heading(id="heading", class="form-control")}}          
+            <br />
+            <div >
+                <label for="states">Choose or Create Tag</label>
+                <input class="form-control" type="text"name='tag_name' id="tag_name" name="states" list="states-list">
+                <datalist  id="states-list">
+                    {%for tag in tags%}
+                        <option>{{tag.name}}</option>    
+                    {%endfor%}       
+                </datalist>            
+            </div>    
+            <br />
+            <label for="discription">Discription</label>
+            {{form.text(id="text", class="form-control", id="exampleFormControlTextarea1", rows="3")}}    
+            <br />  
+            <div align="center">
+                {{form.ask(class="btn btn-lg btn-primary")}}
             </div>
         </form>
-       
-        {%endif%}
-        {% for post in user.posts%}
-        <div class="card text-center">
-            <div class="card-header">
-                {{user.fullname}}
-            </div>
-            <div class="card-body">
-                <div>
-                    <span>{{ post.likes|length }}</span> 
-                      {% if current_user.id in post.likes|map(attribute="user_id")|list %}
-                      <a href="{{ url_for('like', question_id=post.id)}}"><i class="fas fa-thumbs-up"></i></a>
-                      {% else %}                    
-                      <a href="{{ url_for('like', question_id=post.id)}}"><i class="far fa-thumbs-up"></i></a>
-                    {%endif%}
-                  </div>
-                <div class="card-title">
-                    <h5 >tags </h5>
-                </div>
-                
-                <p class="card-text">{{post}}</p>
-                <a href="{{ url_for('question_detail', question_id=post.id)}}" class="btn btn-primary">Comment</a>
-            </div>
-            <div class="card-footer text-muted">
-                {{post.date_add}} 
-                {% if post.comments|length > 0 %}
-                <a href="{{ url_for('question_detail', question_id=post.id)}}">  {{post.comments|length}}  answer </a>
-                {%else%}
-                no answer yet
-                {%endif%}
-                {%if post.user.id == current_user.id%}
-                <div>
-                    <a href="{{url_for('delete_question', question_id=post.id)}}" class="dropdown-item"><smal class="text-muted">Delete</smal></a>
-                </div>
-                {%endif%}
-                </div>
+        <br />
+        <div align="center">
+            <a href="{{ url_for('api.index') }}"><button type="button" class="btn btn-lg btn-secondary">Back</button></a>
         </div>
-        {%endfor%}
-        
+    
+        {%endif%}    
     </div>
+
+    <h1 align="center">{% block header %}Posts{% endblock %}</h1>
+    <div id="posts">
+    {% for post in user.posts %}
+    <div class="card border-dark">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <a class="nav-item nav-link active" href="{{ url_for('auth.get_user', user_id=post.user.id) }}">{{post.user.fullname}}</a>
+            <br />
+            {% if current_user.id == post.author %}
+            <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown"></button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="{{ url_for('post.delete_post', id=post.id) }}" class="dropdown-item">Delete</a>
+                    </li>
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            <a class="card-title nav-item nav-link text-center" href="{{ url_for('post.post_detail', post_id=post.id) }}"><h5 >{{post.heading}}</h5></a>
+            <h6 class="card-subtitle mb-2 text-muted text-center">{{post.tags}}</h6>
+
+            <div class="card-text ">{{post.text}}</div>
+            <br />
+            <div class="collapse" id="comments-{{post.id}}">
+                <div class="card">
+                <div class="card-body" id="comments-expanded-{{post.id}}">
+                    {% for comment in post.comments %}
+                    <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <a href="{{ url_for('auth.get_user', user_id=comment.user.id) }}">{{comment.user.fullname}}</a>
+                        {{comment.text}}
+                    </div>
+                    <div>
+                        <small class="text-muted"> {{comment.date_created}}</small>
+                        {% if current_user.id == comment.author or current_user.id == post.author %}
+                        <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown"></button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="{{ url_for('post.delete_comment', comment_id=comment.id) }}" class="dropdown-item">Delete</a>
+                            </li>
+                        </ul>
+                        </div>
+                        {% endif %}
+                    </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                </div>
+            </div>
+            <p class="card-text">
+                {% if post.comments|length > 0 %}
+                <a data-bs-toggle="collapse" href="#comments-{{post.id}}" role="button">
+                <cite title="Source" >View {{post.comments|length}} Comments</cite>
+                </a>
+                {% else %}
+                <small class="text-muted">No Comments</small>
+                {% endif %}
+            </p>
+            
+        </div>
+        <form class="input-group mb-3" method="POST" action="/create-comment/{{post.id}}" >
+            <input type="text" id="text"  name="text" class="form-control" placeholder="Comment something!" />
+            <button type="submit" class="btn btn-primary">Comment</button>
+        </form>
+        <div class="text-right">
+            <span id="likes-count-{{post.id}}">{{ post.likes|length }}</span> 
+            {% if current_user.id in post.likes|map(attribute="author")|list %}
+            <i class="fas fa-thumbs-up" id="like-button-{{post.id}}" onclick="like('{{post.id}}')"></i>
+            {% else %}
+            <i class="far fa-thumbs-up" id="like-button-{{post.id}}" onclick="like('{{post.id}}')"></i>
+            {% endif %}
+        </div>
+        
+        <div class="card-footer text-muted">{{post.date_created}}</div>
+
+    </div>
+    <br/ > {% endfor %}
+    </div>
+    
 {% endblock %}
+

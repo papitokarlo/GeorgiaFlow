@@ -1,10 +1,5 @@
-from view import app
-from auth import app
-from questions import app
-
+from api import create_app
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=8000)
-
-
-#pip freeze > requirements.txt or pipreqs>requirements.txt
+    app = create_app()
+    app.run(debug=True, host='0.0.0.0', port=5000)

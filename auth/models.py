@@ -1,29 +1,46 @@
-from auth import db, admin
+from auth import db
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from flask_admin.contrib.sqla import ModelView
-from questions.models import Question, Comments, Likes
+from question.models import Post, Tag, Comment
 
-class Users(db.Model, UserMixin):
 
-    __tablename__ = 'users'
+def name_capitalize(fullname):
+    words=[]
+    fullname = fullname.split()
+    for word in fullname:
+        new_word = word.capitalize()
+        words.append(new_word)
+    fullname  = ' '.join([str(elem) for elem in words])
+    return fullname
+
+
+class User(db.Model, UserMixin):
+
+    __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key=True)
     fullname = db.Column(db.String(200), nullable = False, index=True)
     email = db.Column(db.String(100), nullable = False, unique = True, index=True)
-    date_add = db.Column(db.DateTime, default = datetime.utcnow())
+    linkedin = db.Column(db.String(50), unique=True, nullable = False) 
+    github = db.Column(db.String(45), unique=True, nullable = False) 
+    date_created = db.Column(db.DateTime, default = datetime.utcnow())
     password_hash = db.Column(db.String(128)) 
-    posts = db.relationship('Question', backref='user')
-    comments = db.relationship('Comments', backref='comment_user')
-    likes = db.relationship('Likes', backref='user_likes')
+    posts = db.relationship('Post', backref='user', passive_deletes=True)
+    tags = db.relationship('Tag', backref='user', passive_deletes=True)
+    comments = db.relationship('Comment', backref='user', passive_deletes=True)
+    likes = db.relationship('Like', backref='user', passive_deletes=True)
+    # correct = db.relationship('Correct', backref='correct_user')
 
-
-    def __init__(self, fullname, email, date_add, password_hash):
-        self.fullname = fullname.upper()
+    def __init__(self, fullname, email, linkedin, github,  password_hash, date_created=datetime.utcnow()):
+        self.fullname = name_capitalize(fullname)
         self.email = email
+        self.linkedin = linkedin
+        self.github = github
         self.password_hash = generate_password_hash(password_hash)
-        self.date_add = date_add
+
+
 
     def __repr__(self):
         return self.fullname
@@ -32,12 +49,12 @@ class Users(db.Model, UserMixin):
         return check_password_hash(self.password_hash,password)
 
 
-admin.add_view(ModelView(Users, db.session))
 
-# Users.query.filter_by(id=9).delete()
-# db.session.commit()
+# user = User.query.filter_by(id=1).first()
+# print('userndasnfms fsdfdsfdsbfsd : ', user)
+# # db.session.commit()
   
-# new = Users("zura befadze", "begadze.zy@gmail.com", datetime.utcnow(), "kasndansda")
+# new = User("zura befadze", "begadze.zy@gmail.com", 'www.hjashfjah.com', 'www.sfdsf.com',  "kasndansda")
 # db.drop_all()
 # db.create_all()
 # db.session.add(new)

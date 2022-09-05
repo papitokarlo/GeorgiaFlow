@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}GeorgiaFlow-SignUp{% endblock %} 
+{% block content %}
+ 
+  <form method="POST">
+    {{ form.hidden_tag() }} 
+    <h3 align="center">Sign Up</h3>
+    <div class="form-group">
+      <label for="fullname">Fullname</label>
+      {{form.fullname(type="text", id="fullname",  class="form-control",   placeholder="Enter Fullname")}}
+
+      <label for="email">Email Address</label>
+      {{form.email(type="text", id="email",  class="form-control", placeholder="Enter Email")}} 
+          
+      <label for="linkedin">linkedin</label>
+      {{form.linkedin(type="url", id="linkedin", class="form-control",   placeholder="Enter linkedin url")}}
+
+      <label for="github">GitHub</label>
+      {{form.github(type="url", id="github", class="form-control",   placeholder="Enter github url")}}
+
+      <label for="password1">Password</label>
+      {{form.password(type="password", id="password1", class="form-control", placeholder="Enter Password")}}
+      
+      <label for="password2">Password Again</label>
+      {{form.confirm_password(type="password", id="password2", class="form-control", placeholder="Enter Password Again")}}
+      
+      <br />
+      <div align="center">
+        {{form.register(class="btn btn-success btn-block btn-lg gradient-custom-4 text-body")}}
+      </div>
+    </div>
+  </form>
+{% endblock %}
