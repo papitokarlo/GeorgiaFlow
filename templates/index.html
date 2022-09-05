@@ -2,11 +2,10 @@
 {%block title%}GeorgiaFlow{%endblock%}
 {% block content %}
 
-    <div class="form-outline mb-4">
+    <div class="form-outline mb-4" style="margin-top:2.5%">
         <input type="search" class="form-control" id="datatable-search-input">
-        <label class="form-label" for="datatable-search-input">Search</label>
     </div>
-    <h1 align="center">{% block header %}Posts{% endblock %}</h1>
+    <h1 align="center">{% block header %}{% endblock %}</h1>
     <div id="posts">
     {% for post in posts %}
     <div class="card border-dark">

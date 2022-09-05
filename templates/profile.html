@@ -5,14 +5,18 @@
             
         <div class="card-body">
             <h5 class="card-title fw-bolder">{{user.fullname}}</h5>
-            <p class="card-text fw-semibold">Mail : <a class="link-secondary" href="mailto:{{user.email}}">{{user.email}}</a></p>
-            <p type="url" class="card-text fw-semibold" >LinkdIn : <a href="{{user.linkedin}}" class="link-secondary">{{user.linkedin}}</a></p>
-            <p type="url" class="card-text fw-semibold">GitHub : <a href="{{user.github}}" class="link-secondary">{{user.github}}</a></p>
+            <p class="card-text fw-semibold">Mail : <a class="link-secondary" target="_blank" href="mailto:{{user.email}}">{{user.email}}</a></p>
+            <p type="url" class="card-text fw-semibold" >LinkdIn : <a target="_blank" href="{{user.linkedin}}" class="link-secondary">{{user.linkedin}}</a></p>
+            <p type="url" class="card-text fw-semibold">GitHub : <a target="_blank" href="{{user.github}}" class="link-secondary">{{user.github}}</a></p>
             <br />
             <p type="url" class="fw-normal text-right fst-italic">Total questions : {{user.posts|length}} </p>
             <p type="url" class="fw-normal text-right fst-italic">Total answers : {{user.comments|length}} </p>
             <p type="url" class="fw-normal text-right fst-italic">Total created tags : {{user.tags|length}} </p>
-            <p type="url" class="fw-normal text-right fst-italic">Total likes on posts : {{user.posts.likes|length}} </p>
+            {%if total_likes%}
+            <p type="url" class="fw-normal text-right fst-italic">Total likes on posts : {{total_likes}} </p>
+            {%else%}
+            <p type="url" class="fw-normal text-right fst-italic">Total likes on posts : 0 </p>
+            {%endif%}
         </div>
     </div>
     <div id="posts">

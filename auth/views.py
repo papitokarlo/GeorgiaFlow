@@ -3,7 +3,7 @@ from flask_login import  login_required, logout_user, login_user, current_user
 
 
 from . import db
-from .forms import RegistrateForm, LoginForm
+from .forms import RegistrateForm, LoginForm, UpdateForm
 from .models import User
 from question.models import Post, Tag, Like
 from question.forms import questionForm
@@ -57,8 +57,10 @@ def get_user(user_id):
     # posts = Post.query.order_by(Post.date_created).all()
     form = questionForm()
 
-    # total_likes = 0
-    # for likes in user.posts:
+    total_likes = 0
+    if user.posts:
+        for likes in user.posts:        
+            total_likes+=1
 
     if form.validate_on_submit():
         user = current_user.id
@@ -75,6 +77,38 @@ def get_user(user_id):
         db.session.commit()
         flash('posted succesfuly')
 
-        return render_template("profile.html", user = user, form=form, tags = tags)
+        return render_template("profile.html", user = user, form=form, total_likes = total_likes,tags = tags)
 
-    return render_template("profile.html", user = user, form=form, tags = tags)
+    return render_template("profile.html", user = user, form=form, total_likes = total_likes, tags = tags)
+
+
+
+@auth.route("/update/<user_id>", methods=['GET', 'POST'])
+@login_required
+def update(user_id):
+    form = UpdateForm()
+    if request.method=='POST':
+        update_user = User.query.filter_by(id = user_id).first()
+        update_user.fullname = form.fullname.data
+        update_user.email = form.email.data
+        update_user.github = form.github.data
+        update_user.linkedin = form.linkedin.data
+        # if form.new_password.data:
+        #     if update_user.check_password(form.old_password.data):
+        #         update_user.password_hash = form.new_password.data
+        #         flash('Password changed succesfuly', category='error')
+        #     else:
+        #         flash('old pasword doesnt match', category='error')
+        db.session.commit()
+        flash('Personal info updated succesfuly', category='success')
+        return redirect(url_for('auth.get_user', user_id=user_id ))
+
+    return render_template('update.html', form=form)
+
+# admin = User.query.filter_by(username='admin').first()
+# admin.email = 'my_new_email@example.com'
+# db.session.commit()
+
+# user = User.query.get(5)
+# user.name = 'New Name'
+# db.session.commit()
