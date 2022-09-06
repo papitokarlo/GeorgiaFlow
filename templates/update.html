@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}GeorgiaFlow-SignUp{% endblock %} 
 {% block content %}
- 
+  {%if form %}
   <form method="POST" action="{{url_for('auth.update', user_id=current_user.id)}}">
     {{ form.hidden_tag() }} 
     <h3 align="center">Update your info</h3>
@@ -19,8 +19,30 @@
       {{form.github(type="url", id="github", class="form-control",   value=current_user.github)}}
       <br />
       <div align="center">
-        <input type="submit" value="Submit">
+        <input type="submit" class="btn btn-secondary" value="Update">
       </div>
     </div>
   </form>
+  {%elif password_form %}
+  <form method="POST">
+    {{ password_form.hidden_tag() }} 
+    <h3 align="center">Change Password</h3>
+    <div class="form-group">
+      <label for="password1">Old Password</label>
+      {{password_form.old_password(type="password", id="password1", class="form-control", placeholder="Enter Password")}}
+      
+      <label for="password2">New Password</label>
+      {{password_form.new_password(type="password", id="password2", class="form-control", placeholder="Enter New Password")}}
+
+
+      <label for="password3">Password Again</label>
+      {{password_form.confirm_password(type="password", id="password3", class="form-control", placeholder="Enter New Password Again")}}
+      
+      <br />
+      <div align="center">
+        <input type="submit" class="btn btn-secondary" value="Update">
+      </div>
+    </div>
+  </form>
+  {% endif %}
 {% endblock %}

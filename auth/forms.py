@@ -35,11 +35,15 @@ class UpdateForm(FlaskForm):
     email = StringField('Email Address', [Length(min=5, max=60), Email(message='Requeired type is : example@example.exe'), DataRequired(message='input your email')])
     linkedin = URLField('LinkedIn addres', [Length(min=6, max=70), URL(message='Requeired type is URL http/...'), DataRequired(message='input your linkedin account')])
     github = URLField('GitHub addres', [Length(min=6, max=70), URL(message='Requeired type is URL http/...'), DataRequired(message='input your github account')])
-    # old_password = PasswordField('New Password', [Length(min=6, max=35)])
-    # new_password = PasswordField('New Password', [Length(min=6, max=35), EqualTo('confirm_new_password', message='Passwords must match')])
-    # confirm_new_password = PasswordField('Repeat Password', [Length(min=6, max=35),])
     update = SubmitField("Register")
 
     def validate_email(self, email):
         if User.query.filter_by(email=self.email.data).first():
             raise ValidationError('Email has been registered')
+
+class UpdatePasswordForm(FlaskForm):
+
+    old_password = PasswordField('Old Password', [Length(min=6, max=35)])
+    new_password = PasswordField('New Password', [Length(min=6, max=35), EqualTo('confirm_password', message='Passwords must match')])
+    confirm_password = PasswordField('Repeat Password', [Length(min=6, max=35),])
+    update = SubmitField("UPDATE")

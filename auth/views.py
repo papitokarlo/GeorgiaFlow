@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from flask_login import  login_required, logout_user, login_user, current_user
-
+from werkzeug.security import generate_password_hash
 
 from . import db
-from .forms import RegistrateForm, LoginForm, UpdateForm
+from .forms import RegistrateForm, LoginForm, UpdateForm, UpdatePasswordForm
 from .models import User
 from question.models import Post, Tag, Like
 from question.forms import questionForm
@@ -86,29 +86,54 @@ def get_user(user_id):
 @auth.route("/update/<user_id>", methods=['GET', 'POST'])
 @login_required
 def update(user_id):
+
     form = UpdateForm()
+    
     if request.method=='POST':
         update_user = User.query.filter_by(id = user_id).first()
         update_user.fullname = form.fullname.data
         update_user.email = form.email.data
         update_user.github = form.github.data
         update_user.linkedin = form.linkedin.data
-        # if form.new_password.data:
-        #     if update_user.check_password(form.old_password.data):
-        #         update_user.password_hash = form.new_password.data
-        #         flash('Password changed succesfuly', category='error')
-        #     else:
-        #         flash('old pasword doesnt match', category='error')
+
         db.session.commit()
+
         flash('Personal info updated succesfuly', category='success')
+
         return redirect(url_for('auth.get_user', user_id=user_id ))
 
     return render_template('update.html', form=form)
 
-# admin = User.query.filter_by(username='admin').first()
-# admin.email = 'my_new_email@example.com'
-# db.session.commit()
 
-# user = User.query.get(5)
-# user.name = 'New Name'
-# db.session.commit()
+@auth.route("/update-password/<user_id>", methods=['GET', 'POST'])
+@login_required
+def update_password(user_id):
+
+    password_form = UpdatePasswordForm()
+
+    if request.method=='POST':
+        user = User.query.filter_by(id=user_id).first()
+        if user is not None and user.check_password(password_form.old_password.data):
+
+            if password_form.confirm_password.data == password_form.new_password.data and password_form.old_password.data != password_form.new_password.data:
+
+                new_password_hash=password_form.new_password.data
+                user.password_hash = generate_password_hash(new_password_hash)
+                db.session.commit()
+                flash('Password updated succesfuly', category='success')
+
+                return redirect(url_for('auth.get_user', user_id=user_id ))
+
+            elif password_form.old_password.data == password_form.new_password.data:
+                flash('As it seems, you use old password, change it with new one ', category='error')
+                return redirect(url_for('auth.update_password', user_id=user_id ))
+
+            else:
+                flash('Confrim password doesnt match', category='error')
+                return redirect(url_for('auth.update_password', user_id=user_id ))
+
+        else:
+            flash('Old password doesnt match', category='error')
+            return redirect(url_for('auth.update_password', user_id=user_id ))
+
+    return render_template('update.html', password_form=password_form)
