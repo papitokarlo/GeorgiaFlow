@@ -66,6 +66,9 @@
                 <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown"></button>
                 <ul class="dropdown-menu">
                     <li>
+                        <a href="{{ url_for('post.edit_post', post_id=post.id) }}" class="dropdown-item">Edit</a>
+                    </li>
+                    <li>
                         <a href="{{ url_for('post.delete_post', id=post.id) }}" class="dropdown-item">Delete</a>
                     </li>
                 </ul>
