@@ -52,7 +52,7 @@ def logout():
 @auth.route('/user/<user_id>', methods=['GET', 'POST'])
 def get_user(user_id):
     user = User.query.filter_by(id = user_id).first()
-    tags = Tag.query.order_by(Tag.date_created).all()
+    tags = Tag.query.order_by(Tag.name).all()
 
     # posts = Post.query.order_by(Post.date_created).all()
     form = questionForm()
@@ -66,18 +66,17 @@ def get_user(user_id):
         user = current_user.id
         tag_name = request.form.get('tag_name')
 
-        if tag_name not in tags:     
+        if tag_name not in {tag.name for tag in tags}:  
             new_tag = Tag(tag_name, user)
             db.session.add(new_tag)
-            db.session.commit() 
-
+            db.session.commit()
+        
         post = Post(form.heading.data, form.text.data, user, tag_name)
-
         db.session.add(post)
         db.session.commit()
         flash('posted succesfuly')
 
-        return render_template("profile.html", user = user, form=form, total_likes = total_likes,tags = tags)
+        return redirect(url_for('auth.get_user', user_id=user_id))
 
     return render_template("profile.html", user = user, form=form, total_likes = total_likes, tags = tags)
 

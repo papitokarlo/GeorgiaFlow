@@ -4,8 +4,8 @@ from flask import jsonify
 
 from question import db
 
-# from .forms import questionForm
-from .models import Post, Comment, Like
+from .forms import questionUpdateForm
+from .models import Post, Comment, Like, Tag
 
 post = Blueprint("post", __name__)
 
@@ -23,7 +23,13 @@ def delete_post(id):
     db.session.commit()
     flash('Post deleted.', category='success')
 
-    return redirect(url_for('api.index'))
+    next = request.args.get('next')
+
+    if next == None or not next[0] == '/':
+        next = url_for('api.index')
+
+    return redirect(next)
+
 
 @post.route("/create-comment/<post_id>", methods=['POST'])
 @login_required
@@ -78,3 +84,23 @@ def like(post_id):
         db.session.commit()
 
     return jsonify({"likes": len(post.likes), "liked": current_user.id in map(lambda x: x.author, post.likes)})
+
+
+@post.route("/edit-post/iditpost:<post_id>", methods=['GET', 'POST'])
+@login_required
+def edit_post(post_id ):
+    post_update_form = questionUpdateForm()
+
+    tags = Tag.query.order_by(Tag.date_created).all()
+    update_post = Post.query.filter_by(id=post_id).first()
+    if post_update_form.validate_on_submit():
+
+        update_post.heading = post_update_form.heading.data
+        update_post.tags = request.form.get('tag_name')
+        update_post.text = post_update_form.text.data
+
+        db.session.commit()
+        flash('Personal info updated succesfuly', category='success')
+
+        return redirect(url_for('post.post_detail', post_id=post_id ))
+    return render_template('update.html', post_update_form=post_update_form, tags = tags, update_post=update_post )

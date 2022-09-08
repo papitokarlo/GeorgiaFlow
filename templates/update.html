@@ -28,16 +28,49 @@
     {{ password_form.hidden_tag() }} 
     <h3 align="center">Change Password</h3>
     <div class="form-group">
-      <label for="password1">Old Password</label>
-      {{password_form.old_password(type="password", id="password1", class="form-control", placeholder="Enter Password")}}
+      <label for="password">Old Password</label>
+      {{password_form.old_password(type="password", id="password", class="form-control", placeholder="Enter Password")}}
       
-      <label for="password2">New Password</label>
-      {{password_form.new_password(type="password", id="password2", class="form-control", placeholder="Enter New Password")}}
-
+      <label for="password1">New Password</label>
+      {{password_form.new_password(type="password", id="password1", class="form-control", placeholder="Enter New Password", pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}", title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters")}}
+      <div id="message" class="alert alert-success">
+        <h3>Password must contain the following:</h3>
+        <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
+        <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
+        <p id="number" class="invalid">A <b>number</b></p>
+        <p id="length" class="invalid">Minimum <b>8 characters</b></p>
+      </div>
 
       <label for="password3">Password Again</label>
       {{password_form.confirm_password(type="password", id="password3", class="form-control", placeholder="Enter New Password Again")}}
       
+      <br />
+      <div align="center">
+        <input type="submit" class="btn btn-secondary" value="Update">
+      </div>
+    </div>
+  </form>
+  {%elif post_update_form%}
+  <form method="POST">
+    {{ post_update_form.hidden_tag() }} 
+    <h3 align="center">Edit Post</h3>
+    <div class="form-group">
+      <label for="header">Question </label>
+      {{post_update_form.heading(id="heading", class="form-control", value=update_post.heading)}}          
+      <br />
+      <div >
+        <label for="states">Choose or Create Tag</label>
+        <input class="form-control" type="text"name='tag_name' id="tag_name" name="states" list="states-list" value={{update_post.tags}}>
+          <datalist  id="states-list">
+            {%for tag in tags%}
+              <option>{{tag.name}}</option>    
+            {%endfor%}       
+          </datalist>            
+     </div>    
+      <br />
+      <label for="discription">Discription</label>
+      {{post_update_form.text(id="text", class="form-control", id="exampleFormControlTextarea1", rows="3", value=update_post.text)}}
+      <br />  
       <br />
       <div align="center">
         <input type="submit" class="btn btn-secondary" value="Update">

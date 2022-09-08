@@ -47,15 +47,3 @@ class User(db.Model, UserMixin):
 
     def check_password(self,password):
         return check_password_hash(self.password_hash,password)
-
-
-
-# user = User.query.filter_by(id=1).first()
-# print('userndasnfms fsdfdsfdsbfsd : ', user)
-# # db.session.commit()
-  
-# new = User("zura befadze", "begadze.zy@gmail.com", 'www.hjashfjah.com', 'www.sfdsf.com',  "kasndansda")
-# db.drop_all()
-# db.create_all()
-# db.session.add(new)
-# db.session.commit()
