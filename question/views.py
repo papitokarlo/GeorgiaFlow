@@ -11,8 +11,10 @@ post = Blueprint("post", __name__)
 
 @post.route('/post/<post_id>', methods=['GET', 'POST'])
 def post_detail(post_id):
+
+    tags = Tag.query.order_by(Tag.name).all()
     post = Post.query.filter_by(id=post_id).first()
-    return render_template('detail.html', post=post)
+    return render_template('detail.html', post=post, tags=tags)
 
 @post.route("/delete-post/<id>")
 @login_required
@@ -104,3 +106,11 @@ def edit_post(post_id ):
 
         return redirect(url_for('post.post_detail', post_id=post_id ))
     return render_template('update.html', post_update_form=post_update_form, tags = tags, update_post=update_post )
+
+
+@post.route("/tag-post/<tag_name>'sallpost:", methods=['GET', 'POST'])
+@login_required
+def tag_posts(tag_name):
+    tag = Tag.query.filter_by(name=tag_name).first()
+    posts = Post.query.order_by(Post.date_created).all()
+    return render_template('tags.html', tag = tag, posts=posts)

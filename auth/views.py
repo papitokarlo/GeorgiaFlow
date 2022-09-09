@@ -13,6 +13,7 @@ auth = Blueprint("auth", __name__)
 
 @auth.route('/sing-up', methods=['GET', 'POST'])
 def signup():
+    tags = Tag.query.order_by(Tag.name).all()
     form = RegistrateForm()
     if form.validate_on_submit():
         
@@ -21,11 +22,12 @@ def signup():
         db.session.commit()
         flash('User created!')
         return redirect(url_for('api.index'))
-    return render_template("signup.html", form = form)
+    return render_template("signup.html", form = form, tags=tags)
 
     
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
+    tags = Tag.query.order_by(Tag.name).all()
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
@@ -39,7 +41,7 @@ def login():
             return redirect(next)
         else:
             flash(f'user didnt find', category='error')
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form, tags = tags)
 
 
 @auth.route("/logout")
@@ -85,6 +87,7 @@ def get_user(user_id):
 @auth.route("/update/<user_id>", methods=['GET', 'POST'])
 @login_required
 def update(user_id):
+    tags = Tag.query.order_by(Tag.name).all()
 
     form = UpdateForm()
     
@@ -101,12 +104,14 @@ def update(user_id):
 
         return redirect(url_for('auth.get_user', user_id=user_id ))
 
-    return render_template('update.html', form=form)
+    return render_template('update.html', form=form, tags = tags)
 
 
 @auth.route("/update-password/<user_id>", methods=['GET', 'POST'])
 @login_required
 def update_password(user_id):
+    
+    tags = Tag.query.order_by(Tag.name).all()
 
     password_form = UpdatePasswordForm()
 
@@ -135,4 +140,4 @@ def update_password(user_id):
             flash('Old password doesnt match', category='error')
             return redirect(url_for('auth.update_password', user_id=user_id ))
 
-    return render_template('update.html', password_form=password_form)
+    return render_template('update.html', password_form=password_form, tags=tags)

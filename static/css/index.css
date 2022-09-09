@@ -33,3 +33,27 @@
     left: -35px;
     content: "✖";
   }
+
+.navtag {
+  position: relative;
+  overflow: hidden;
+  scroll-behavior: smooth;
+}
+  .navtagul {
+    display: flex;
+    overflow: auto;
+    list-style: none;
+    text-align: center;
+    white-space: nowrap;
+    background-color: rgba(rgb(124, 116, 116), green, blue, alpha);
+  }
+  
+  .navtaga {
+    display: block;
+    padding: .5rem .75rem;
+    overflow: hidden;
+    background-color: rgba(rgb(119, 136, 127), green, blue, alpha);
+  }
+  .example::-webkit-scrollbar {
+    display: none;
+  }
