@@ -14,6 +14,8 @@ class Post(db.Model):
     author = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)    
     comments = db.relationship('Comment', backref='post', passive_deletes=True)
     likes = db.relationship('Like', backref='post', passive_deletes=True)
+    corrects = db.relationship('Correct', backref='post', passive_deletes=True)
+
 
     def __init__(self, heading, text, author, tags,  date_created=datetime.utcnow()):
         self.heading = heading
@@ -55,6 +57,7 @@ class Comment(db.Model):
     date_created = db.Column(db.DateTime, default = datetime.utcnow())
     author = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id', ondelete="CASCADE"), nullable=False)
+    corrects = db.relationship('Correct', backref='comment', passive_deletes=True)
 
     def __init__(self, text, author, post_id, date_created = datetime.utcnow() ):
         self.text = text
@@ -77,3 +80,19 @@ class Like(db.Model):
     def __init__(self, author, post_id, date_created = datetime.utcnow()):
         self.author = author
         self.post_id = post_id
+
+
+class Correct(db.Model):
+
+    __tablename__='correct'
+
+    id = db.Column(db.Integer, primary_key=True)
+    date_created = db.Column(db.DateTime, default = datetime.utcnow())
+    author = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id', ondelete="CASCADE"), nullable=False)
+    comment_id = db.Column(db.Integer, db.ForeignKey('comment.id', ondelete="CASCADE"), nullable=False)
+
+    def __init__(self, author, post_id, comment_id, date_created = datetime.utcnow()):
+        self.author = author
+        self.post_id= post_id
+        self.comment_id =comment_id

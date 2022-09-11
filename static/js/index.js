@@ -16,6 +16,25 @@ function like(postId) {
 }
 
 
+// function correct(commentText, postId, commentID) {
+//   console.log(postId, commentID, commentText)
+  // const likeButton = document.getElementById(`correct-button-${commentID}`);
+
+  // fetch(`/like-post/${postId}`, { method: "POST" })
+  //   .then((res) => res.json())
+  //   .then((data) => {
+  //     likeCount.innerHTML = data["likes"];
+  //     if (data["liked"] === true) {
+  //       likeButton.className = "fas fa-thumbs-up";
+  //     } else {
+  //       likeButton.className = "far fa-thumbs-up";
+  //     }
+  //   })
+  //   .catch((e) => alert("Could not like post."));
+// }
+
+
+
 var myInput = document.getElementById("password1");
 var letter = document.getElementById("letter");
 var capital = document.getElementById("capital");

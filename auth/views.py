@@ -84,6 +84,12 @@ def get_user(user_id):
         for post in user.posts: 
             for _ in post.likes:
                 total_likes+=1    
+    
+    correct_answers = 0
+    if user.comments:
+        for comment in user.comments:
+            if comment.corrects:
+                correct_answers+=1
 
     if form.validate_on_submit():
         user = current_user.id
@@ -101,7 +107,7 @@ def get_user(user_id):
 
         return redirect(url_for('auth.get_user', user_id=user_id))
 
-    return render_template("profile.html", user = user, form=form, total_likes = total_likes)
+    return render_template("profile.html", user = user, form=form, tags=tags, total_likes = total_likes, correct_answers=correct_answers)
 
 
 

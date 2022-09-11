@@ -3,7 +3,7 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from flask_admin.contrib.sqla import ModelView
-from question.models import Post, Tag, Comment
+from question.models import Post, Tag, Comment, Correct, Like
 
 
 def name_capitalize(fullname):
@@ -31,7 +31,7 @@ class User(db.Model, UserMixin):
     tags = db.relationship('Tag', backref='user', passive_deletes=True)
     comments = db.relationship('Comment', backref='user', passive_deletes=True)
     likes = db.relationship('Like', backref='user', passive_deletes=True)
-    # correct = db.relationship('Correct', backref='correct_user')
+    correct = db.relationship('Correct', backref='correct_user', passive_deletes=True)
 
     def __init__(self, fullname, email, linkedin, github,  password_hash, date_created=datetime.utcnow()):
         self.fullname = name_capitalize(fullname)

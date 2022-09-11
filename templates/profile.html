@@ -9,14 +9,11 @@
             <p type="url" class="card-text fw-semibold" >LinkdIn : <a target="_blank" href="{{user.linkedin}}" class="link-secondary">{{user.linkedin}}</a></p>
             <p type="url" class="card-text fw-semibold">GitHub : <a target="_blank" href="{{user.github}}" class="link-secondary">{{user.github}}</a></p>
             <br />
-            <p type="url" class="fw-normal text-right fst-italic">Total questions : {{user.posts|length}} </p>
-            <p type="url" class="fw-normal text-right fst-italic">Total answers : {{user.comments|length}} </p>
-            <p type="url" class="fw-normal text-right fst-italic">Total created tags : {{user.tags|length}} </p>
-            {%if total_likes%}
-            <p type="url" class="fw-normal text-right fst-italic">Total likes on posts : {{total_likes}} </p>
-            {%else%}
-            <p type="url" class="fw-normal text-right fst-italic">Total likes on posts : 0 </p>
-            {%endif%}
+            <p type="text" class="fw-normal text-right fst-italic">Total questions : {{user.posts|length}} </p>
+            <p type="text" class="fw-normal text-right fst-italic">Total answers : {{user.comments|length}} </p>
+            <p type="text" class="fw-normal text-right fst-italic">Total correct answers : {{correct_answers}} </p>
+            <p type="text" class="fw-normal text-right fst-italic">Total created tags : {{user.tags|length}} </p>
+            <p type="text" class="fw-normal text-right fst-italic">Total likes on posts : {{total_likes}} </p>
         </div>
     </div>
     <div id="posts">
@@ -54,7 +51,11 @@
         {%endif%}    
     </div>
 
-    <h1 align="center">{% block header %}Posts{% endblock %}</h1>
+    {%if user.posts%}
+    <h1 align="center">{% block header %}Questions{% endblock %}</h1>
+    {%else%}
+    <h1 align="center">No Questions to show</h1>
+    {%endif%}
     <div id="posts">
     {% for post in user.posts|reverse %}
     <div class="card border-dark">
@@ -87,6 +88,23 @@
                     {% for comment in post.comments %}
                     <div class="d-flex justify-content-between align-items-center">
                     <div>
+                        {%if comment.corrects and current_user.id != post.user.id%}
+                            <a>
+                                <i class="fa fa-check-circle" aria-hidden="true"></i>
+                            </a>
+                        {%elif comment.corrects and current_user.id == post.user.id %}
+                            <a href = "{{url_for('post.correct', comment_text=comment.text, post_id=post.id, comment_id=comment.id)}}">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i>
+                            </a>
+                        {%elif current_user.id == post.user.id%}
+                            <a href = "{{url_for('post.correct', comment_text=comment.text, post_id=post.id, comment_id=comment.id)}}">
+                                <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+                            </a>
+                        {%else%}
+                            <a>
+                                <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+                            </a>
+                        {%endif%}
                         <a href="{{ url_for('auth.get_user', user_id=comment.user.id) }}">{{comment.user.fullname}}</a>
                         {{comment.text}}
                     </div>
@@ -137,6 +155,7 @@
     </div>
     <br/ > {% endfor %}
     </div>
+
     
 {% endblock %}
 

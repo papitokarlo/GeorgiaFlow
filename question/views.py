@@ -5,7 +5,7 @@ from flask import jsonify
 from question import db
 
 from .forms import questionUpdateForm
-from .models import Post, Comment, Like, Tag
+from .models import Post, Comment, Like, Tag, Correct
 
 post = Blueprint("post", __name__)
 
@@ -111,5 +111,26 @@ def edit_post(post_id ):
 @post.route("/tag-post/<tag_name>'sallpost:", methods=['GET', 'POST'])
 def tag_posts(tag_name):
     tag = Tag.query.filter_by(name=tag_name).first()
+    tags = Tag.query.order_by(Tag.name).all()
     posts = Post.query.order_by(Post.date_created).all()
-    return render_template('tags.html', tag = tag, posts=posts)
+    return render_template('tags.html', tag = tag, tags=tags, posts=posts)
+
+
+@post.route("/marck-as-correct/<comment_text><post_id><comment_id>", methods=['POST','GET'])
+@login_required
+def correct(comment_text, post_id, comment_id):
+    post = Post.query.filter_by(id=post_id).first()
+    comment = Comment.query.filter_by(id=comment_id).first()
+    correct = Correct.query.filter_by(author=current_user.id, post_id=post_id, comment_id = comment_id ).first()
+
+    if not comment:
+        return jsonify({'error': 'Post does not exist.'}, 400)
+    elif correct:
+        db.session.delete(correct)
+        db.session.commit()
+    else:
+        correct = Correct(current_user.id, post_id, comment_id)
+        db.session.add(correct)
+        db.session.commit()
+
+    return redirect(url_for('post.post_detail', post_id = post_id))

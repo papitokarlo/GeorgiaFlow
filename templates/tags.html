@@ -39,6 +39,23 @@
                     {% for comment in post.comments %}
                     <div class="d-flex justify-content-between align-items-center">
                     <div>
+                        {%if comment.corrects and current_user.id != post.user.id%}
+                            <a>
+                                <i class="fa fa-check-circle" aria-hidden="true"></i>
+                            </a>
+                        {%elif comment.corrects and current_user.id == post.user.id %}
+                            <a href = "{{url_for('post.correct', comment_text=comment.text, post_id=post.id, comment_id=comment.id)}}">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i>
+                            </a>
+                        {%elif current_user.id == post.user.id%}
+                            <a href = "{{url_for('post.correct', comment_text=comment.text, post_id=post.id, comment_id=comment.id)}}">
+                                <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+                            </a>
+                        {%else%}
+                            <a>
+                                <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+                            </a>
+                        {%endif%}
                         <a href="{{ url_for('auth.get_user', user_id=comment.user.id) }}">{{comment.user.fullname}}</a>
                         {{comment.text}}
                     </div>
