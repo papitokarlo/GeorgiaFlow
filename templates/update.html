@@ -50,6 +50,33 @@
       </div>
     </div>
   </form>
+  {%elif forget_form %}
+  <form method="POST">
+    {{ forget_form.hidden_tag() }} 
+    <h3 align="center">forget Password</h3>
+    <div class="form-group">
+      <label for="email">Email:</label>
+      {{forget_form.email(type="email", id="email", class="form-control", placeholder="Enter registred Email")}}
+      
+      <label for="password1">New Password</label>
+      {{forget_form.new_password(type="password", id="password1", class="form-control", placeholder="Enter New Password", pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}", title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters")}}
+      <div id="message" class="alert alert-success">
+        <h3>Password must contain the following:</h3>
+        <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
+        <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
+        <p id="number" class="invalid">A <b>number</b></p>
+        <p id="length" class="invalid">Minimum <b>8 characters</b></p>
+      </div>
+
+      <label for="password3">Password Again</label>
+      {{forget_form.confirm_password(type="password", id="password3", class="form-control", placeholder="Enter New Password Again")}}
+      
+      <br />
+      <div align="center">
+        <input type="submit" class="btn btn-secondary" value="Update">
+      </div>
+    </div>
+  </form>
   {%elif post_update_form%}
   <form method="POST">
     {{ post_update_form.hidden_tag() }} 
@@ -77,5 +104,6 @@
       </div>
     </div>
   </form>
+  
   {% endif %}
 {% endblock %}

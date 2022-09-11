@@ -3,7 +3,7 @@ from flask_login import  login_required, logout_user, login_user, current_user
 from werkzeug.security import generate_password_hash
 
 from . import db
-from .forms import RegistrateForm, LoginForm, UpdateForm, UpdatePasswordForm
+from .forms import RegistrateForm, LoginForm, UpdateForm, UpdatePasswordForm, ForgetForm
 from .models import User
 from question.models import Post, Tag, Like
 from question.forms import questionForm
@@ -44,6 +44,28 @@ def login():
     return render_template('login.html', form=form, tags = tags)
 
 
+@auth.route('/forget-password', methods=['GET', 'POST'])
+def forget_password():
+    forget_form = ForgetForm()
+    if forget_form.validate_on_submit():        
+        user =  User.query.filter_by(email=forget_form.email.data).first()
+        if user is not None:
+            if forget_form.confirm_password.data == forget_form.new_password.data:
+                new_password_hash=forget_form.new_password.data
+                user.password_hash = generate_password_hash(new_password_hash)
+                db.session.commit()
+                flash('Password changed succesfuly', category='success')
+                return redirect(url_for('auth.login'))
+
+            else:
+                flash('Confrim password doesnt match', category='error')
+                return redirect(url_for('auth.forget_password'))
+        else:
+            flash('User with this email didnot found', category='error')
+            return redirect(url_for('auth.login'))
+    return render_template('update.html', forget_form=forget_form)
+
+
 @auth.route("/logout")
 @login_required
 def logout():
@@ -55,14 +77,13 @@ def logout():
 def get_user(user_id):
     user = User.query.filter_by(id = user_id).first()
     tags = Tag.query.order_by(Tag.name).all()
-
-    # posts = Post.query.order_by(Post.date_created).all()
     form = questionForm()
-
+    
     total_likes = 0
     if user.posts:
-        for likes in user.posts:        
-            total_likes+=1
+        for post in user.posts: 
+            for _ in post.likes:
+                total_likes+=1    
 
     if form.validate_on_submit():
         user = current_user.id
@@ -80,7 +101,7 @@ def get_user(user_id):
 
         return redirect(url_for('auth.get_user', user_id=user_id))
 
-    return render_template("profile.html", user = user, form=form, total_likes = total_likes, tags = tags)
+    return render_template("profile.html", user = user, form=form, total_likes = total_likes)
 
 
 

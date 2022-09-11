@@ -47,3 +47,10 @@ class UpdatePasswordForm(FlaskForm):
     new_password = PasswordField('New Password', [Length(min=6, max=35), EqualTo('confirm_password', message='Passwords must match')])
     confirm_password = PasswordField('Repeat Password', [Length(min=6, max=35),])
     update = SubmitField("UPDATE")
+    
+
+class ForgetForm(FlaskForm):
+    email = StringField('Registred email', [Length(min=6, max=35), Email(message='Requeired type is : example@example.exe'), DataRequired(message='input your email')])
+    new_password = PasswordField('New Password', [Length(min=6, max=35), EqualTo('confirm_password', message='Passwords must match')])
+    confirm_password = PasswordField('Repeat Password', [Length(min=6, max=35),])
+    update = SubmitField("UPDATE")

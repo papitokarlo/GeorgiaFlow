@@ -109,7 +109,6 @@ def edit_post(post_id ):
 
 
 @post.route("/tag-post/<tag_name>'sallpost:", methods=['GET', 'POST'])
-@login_required
 def tag_posts(tag_name):
     tag = Tag.query.filter_by(name=tag_name).first()
     posts = Post.query.order_by(Post.date_created).all()

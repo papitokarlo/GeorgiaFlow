@@ -56,7 +56,7 @@
 
     <h1 align="center">{% block header %}Posts{% endblock %}</h1>
     <div id="posts">
-    {% for post in user.posts %}
+    {% for post in user.posts|reverse %}
     <div class="card border-dark">
         <div class="card-header d-flex justify-content-between align-items-center">
             <a class="nav-item nav-link active" href="{{ url_for('auth.get_user', user_id=post.user.id) }}">{{post.user.fullname}}</a>
