@@ -75,10 +75,13 @@ def google_callback():
         login_user(user)   
 
     return redirect(url_for("api.index"))
-    
+
 
 @google_auth.route("/google-login")
 def google_login():
     authorization_url, state = flow.authorization_url()
     session["state"] = state
     return redirect(authorization_url)
+
+
+print('en')
