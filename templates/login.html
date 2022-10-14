@@ -1,7 +1,7 @@
 {% extends "base.html" %}
     {% block title %}GeorgiaFlow-Login{% endblock %} {% block content %}
     google-login
-    <a href = "{{ url_for('auth.google_login') }}"><button type="button" class="btn btn-primary">Primary</button></a>
+    <a href = "{{ url_for('google_auth.google_login') }}"><button type="button" class="btn btn-primary">Primary</button></a>
     <form method="POST">
         {{ form.hidden_tag() }} 
         <h3 align="center">Login</h3>
