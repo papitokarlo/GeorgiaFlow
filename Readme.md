@@ -4,10 +4,10 @@
       
  and after:
  
-  flask run
+      flask run
 
 command.
 
 dont forget to migrate database and install dependencies.
 
-pip install -r requirements.txt
+      pip install -r requirements.txt
