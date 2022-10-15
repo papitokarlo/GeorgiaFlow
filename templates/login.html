@@ -1,10 +1,20 @@
 {% extends "base.html" %}
     {% block title %}GeorgiaFlow-Login{% endblock %} {% block content %}
-    google-login
-    <a href = "{{ url_for('google_auth.google_login') }}"><button type="button" class="btn btn-primary">Primary</button></a>
+   
+    <a href = "{{ url_for('google_auth.google_login') }}" class="nav justify-content-center" >
+        <div class="google-btn">
+            <div class="nav nav-pills nav-fill" style="margin-top:15%">
+                <p class="nav-link active">
+                    Sign in with google  <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"/>
+                </p>
+            </div>
+        </div>
+    </a>
+
+    <a href="{{ url_for('github_auth.github_login') }}"> github login</a>
+
     <form method="POST">
         {{ form.hidden_tag() }} 
-        <h3 align="center">Login</h3>
         <div class="form-group">
             <label for="email">Email Address</label>
             {{form.email(type="text", id="email",  class="form-control", placeholder="Enter Email")}} 
@@ -14,11 +24,13 @@
             <div align="center">
                 {{form.login(class="btn btn-success btn-block btn-lg gradient-custom-4 text-body")}}
             </div>
+            
             <div class="card-footer text-muted">
-                <a href="{{ url_for('auth.forget_password') }}">
-                    forget password ? 
-                </a>
+                    <a href="{{ url_for('auth.forget_password') }}">
+                        forget password ? 
+                    </a>
             </div>
+            
         </div>
     </form>
     {% endblock %}

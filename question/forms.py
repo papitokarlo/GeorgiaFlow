@@ -10,13 +10,13 @@ from .models import Post, Tag
 
 
 class questionForm(FlaskForm):
-    heading = StringField('heading', [Length(min=2, max=50), DataRequired(message='Question ')])
+    heading = StringField('heading', [Length(min=2, max=700), DataRequired(message='Question ')])
     # tag = StringField('Programming Language')
     text = TextAreaField('Question', [Length(min=2, max=1000), DataRequired(message='description')])
     ask = SubmitField("ASK")
 
 class questionUpdateForm(FlaskForm):
-    heading = StringField('heading', [Length(min=2, max=50), DataRequired(message='Question ')])
+    heading = StringField('heading', [Length(min=2, max=700), DataRequired(message='Question ')])
     # tag = StringField('Programming Language')
     text = StringField('Question', [Length(min=2, max=1000), DataRequired(message='description')])
     # ask = SubmitField("ASK")

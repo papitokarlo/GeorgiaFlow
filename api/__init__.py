@@ -60,5 +60,8 @@ def blueprint_register(app):
     app.register_blueprint(auth, url_prefix="/")
     from auth.googleauth import google_auth
     app.register_blueprint(google_auth, url_prefix="/")
+    from auth.github_auth import github_auth, github_blueprint
+    app.register_blueprint(github_auth, url_prefix='/')
+    app.register_blueprint(github_blueprint, url_prefix='/github_login')
     from question.views import post
     app.register_blueprint(post, url_prefix="/")

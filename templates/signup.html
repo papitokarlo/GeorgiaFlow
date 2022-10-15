@@ -1,10 +1,20 @@
 {% extends "base.html" %}
 {% block title %}GeorgiaFlow-SignUp{% endblock %} 
 {% block content %}
- 
+
+  <a href = "{{ url_for('google_auth.google_login') }}" class="nav justify-content-center" >
+    <div class="google-btn">
+        <div class="nav nav-pills nav-fill" style="margin-top:15%">
+            <p class="nav-link active">
+                Sign Up with google  <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"/>
+            </p>
+        </div>
+    </div>
+  </a>
+
   <form method="POST">
     {{ form.hidden_tag() }} 
-    <h3 align="center">Sign Up</h3>
+   
     <div class="form-group">
       <label for="fullname">Fullname</label>
       {{form.fullname(type="text", id="fullname",  class="form-control",   placeholder="Enter Fullname")}}
