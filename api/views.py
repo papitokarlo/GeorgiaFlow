@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template
 from sqlalchemy import desc
 from question.models import Post, Tag
+
 api = Blueprint("api", __name__)
 
 @api.route('/')
