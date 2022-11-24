@@ -3,7 +3,7 @@ import logging
 
 
 
-logging.basicConfig(filename='logger.log', level=logging.INFO, format='%(asctime)s:%(levelno)s:%(pathname)s:%(processName)s:%(levelname)s:%(name)s:%(message)s')
+# logging.basicConfig(filename='logger.log', level=logging.INFO, format='%(asctime)s:%(levelno)s:%(pathname)s:%(processName)s:%(levelname)s:%(name)s:%(message)s')
 
 # logger = logging.getLogger(__name__)
 # logger.setLevel(logging.DEBUG)
@@ -24,6 +24,6 @@ if __name__ == '__main__':
     
     app = create_app()
     app.run(debug=True, host='0.0.0.0', port=5000)
-    logging.info('api accsess : ', app)
-    # logger.info(app)
-    # logger.error(app)
+    # logging.info('api accsess : ', app)
+    # # logger.info(app)
+    # # logger.error(app)
