@@ -170,3 +170,6 @@ def update_password(user_id):
     return render_template('update.html', password_form=password_form, tags=tags)
 
 
+
+
+print("kj rest apize gadavediT")
