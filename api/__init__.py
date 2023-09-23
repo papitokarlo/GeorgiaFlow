@@ -6,7 +6,6 @@ import  os
 from flask_admin.contrib.sqla import ModelView
 from flask_admin import Admin
 
-db = SQLAlchemy()
 
 def create_app():
     templatedir = os.path.abspath('templates')
@@ -49,6 +48,7 @@ def create_app():
 
 
 def create_database(app):
+    db = SQLAlchemy()
     if not os.path.exists("georgiaflow/api" + 'ufp.db'):
         db.create_all(app=app)
         print("Created database!")
